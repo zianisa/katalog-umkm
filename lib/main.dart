@@ -1,118 +1,229 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const KatalogUmkmApp());
+  runApp(const TokoBuahApp());
 }
 
-// 1. Class Model Data (Memiliki minimal 3 properti utama + tambahan detail)
-class ProdukItem {
+// 1. Class Model Data Produk Buah
+class ProdukBuah {
   final String nama;
   final String kategori;
   final int harga;
+  final String satuan;
   final String deskripsi;
   final String gambarUrl;
   final double rating;
 
-  const ProdukItem({
+  const ProdukBuah({
     required this.nama,
     required this.kategori,
     required this.harga,
+    required this.satuan,
     required this.deskripsi,
     required this.gambarUrl,
     required this.rating,
   });
 }
 
-class KatalogUmkmApp extends StatelessWidget {
-  const KatalogUmkmApp({super.key});
+class TokoBuahApp extends StatelessWidget {
+  const TokoBuahApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Katalog UMKM Sidoarjo',
-      // 5. Tema Material 3 dengan warna yang hangat dan modern
+      title: 'Toko Buah Segar Nusantara',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFFE65100), // Nuansa Oranye UMKM/Kuliner
+          seedColor: Colors.green,
           brightness: Brightness.light,
         ),
         fontFamily: 'Roboto',
       ),
-      home: const KatalogHomePage(),
+      // Mulai dari Halaman Welcome/Sambutan dulu
+      home: const WelcomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class KatalogHomePage extends StatelessWidget {
-  const KatalogHomePage({super.key});
+// ==========================================
+// 1. HALAMAN UTAMA / WELCOME SCREEN
+// ==========================================
+class WelcomePage extends StatelessWidget {
+  const WelcomePage({super.key});
 
-  // 2. List berisi minimal 8 data produk UMKM Sidoarjo
-  final List<ProdukItem> daftarProduk = const [
-    ProdukItem(
-      nama: 'Bandeng Presto Sidoarjo',
-      kategori: 'Makanan Khas',
-      harga: 45000,
-      deskripsi: 'Bandeng duri lunak khas Sidoarjo yang diolah dengan rempah pilihan, gurih, higienis, dan lezat disantap dengan sambal petis.',
-      gambarUrl: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=500',
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF1B3B22), // Warna hijau gelap elegan ala alam
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(
+                children: [
+                  Icon(Icons.eco, color: Colors.greenAccent, size: 28),
+                  SizedBox(width: 8),
+                  Text(
+                    'Nusantara Fresh',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              // Gambar Ilustrasi / Banner Selamat Datang
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.network(
+                  'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=600',
+                  height: 320,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(height: 30),
+              const Text(
+                'Better Nutrition\nFor A Healthier You',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  height: 1.2,
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Pilih buah segar pilihan berkualitas langsung dari petani lokal nusantara untuk kebugaran sehari-hari.',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                  height: 1.5,
+                ),
+              ),
+              const Spacer(),
+              // Tombol Masuk ke Beranda
+              SizedBox(
+                width: double.infinity,
+                height: 54,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.greenAccent[700],
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 0,
+                  ),
+                  onPressed: () {
+                    // Navigasi ke Halaman Utama Katalog Beranda
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TokoBuahHomePage(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    'Get Started Now',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ==========================================
+// 2. HALAMAN BERANDA / KATALOG (GRID 2 KOLOM)
+// ==========================================
+class TokoBuahHomePage extends StatelessWidget {
+  const TokoBuahHomePage({super.key});
+
+  // 8 Data Buah Segar
+  final List<ProdukBuah> daftarBuah = const [
+    ProdukBuah(
+      nama: 'Apel Washington Super',
+      kategori: 'Buah Impor',
+      harga: 35000,
+      satuan: 'kg',
+      deskripsi: 'Apel Washington merah segar pilihan, manis, padat, dan kaya akan vitamin C serta serat alami.',
+      gambarUrl: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=500',
+      rating: 4.9,
+    ),
+    ProdukBuah(
+      nama: 'Pisang Cavendish Sunpride',
+      kategori: 'Buah Lokal',
+      harga: 22000,
+      satuan: 'sisir',
+      deskripsi: 'Pisang Cavendish berkualitas tinggi, kulit mulus berwarna kuning cerah, tekstur buah lembut dan manis.',
+      gambarUrl: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=500',
       rating: 4.8,
     ),
-    ProdukItem(
-      nama: 'Kerupuk Udang Finkom',
-      kategori: 'Cemilan',
-      harga: 20000,
-      deskripsi: 'Kerupuk udang renyah khas pesisir Sidoarjo. Dibuat dari udang segar pilihan, sangat cocok untuk oleh-oleh atau teman makan.',
-      gambarUrl: 'https://images.unsplash.com/photo-1599487484170-7c9e6e4cfe81?w=500',
+    ProdukBuah(
+      nama: 'Jeruk Medan Manis',
+      kategori: 'Buah Lokal',
+      harga: 28000,
+      satuan: 'kg',
+      deskripsi: 'Jeruk segar asal Medan dengan kulit tipis, banyak kandungan air, serta rasa manis menyegarkan.',
+      gambarUrl: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=500',
       rating: 4.7,
     ),
-    ProdukItem(
-      nama: 'Petis Udang Asli Delta',
-      kategori: 'Bumbu Dapur',
-      harga: 15000,
-      deskripsi: 'Petis udang murni berkualitas tinggi. Cocok sekali dipadukan untuk rujak cingur, tahu campur, maupun lontong balap khas Jawa Timur.',
-      gambarUrl: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500',
-      rating: 4.9,
-    ),
-    ProdukItem(
-      nama: 'Onde-Onde Bojonegoro',
-      kategori: 'Kue Tradisional',
-      harga: 12000,
-      deskripsi: 'Kue onde-onde hangat isi kacang hijau yang empuk di dalam, bertabur wijen melimpah, manisnya pas dan nagih.',
-      gambarUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500',
-      rating: 4.6,
-    ),
-    ProdukItem(
-      nama: 'Sambal Kupang Bu Siti',
-      kategori: 'Kuliner',
-      harga: 25000,
-      deskripsi: 'Kupang segar khas Sidoarjo disiram kuah kaldu gurih berpadu sambal petis pedas nampol. Kuliner legendaris wajib coba!',
-      gambarUrl: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500',
-      rating: 4.9,
-    ),
-    ProdukItem(
-      nama: 'Kue Madumongso Legendaris',
-      kategori: 'Kue Tradisional',
+    ProdukBuah(
+      nama: 'Mangga Harum Manis',
+      kategori: 'Buah Musiman',
       harga: 30000,
-      deskripsi: 'Jajanan tradisional berbahan dasar ketan hitam yang diolah fermentasi tape lalu dimasak lama dengan santan dan gula merah.',
-      gambarUrl: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500',
-      rating: 4.5,
+      satuan: 'kg',
+      deskripsi: 'Mangga matang pohon berkualitas super, daging buah tebal, harum khas, dan berasa manis legit.',
+      gambarUrl: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=500',
+      rating: 4.9,
     ),
-    ProdukItem(
-      nama: 'Terasi Udang Murni',
-      kategori: 'Bumbu Dapur',
+    ProdukBuah(
+      nama: 'Alpukat Mentega Pilihan',
+      kategori: 'Buah Lokal',
+      harga: 32000,
+      satuan: 'kg',
+      deskripsi: 'Alpukat mentega lokal pilihan dengan daging tebal berwarna kuning mentega, pulen, dan minim serat.',
+      gambarUrl: 'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=500',
+      rating: 4.8,
+    ),
+    ProdukBuah(
+      nama: 'Semangka Merah Tanpa Biji',
+      kategori: 'Buah Segar',
       harga: 18000,
-      deskripsi: 'Terasi udang berkualitas cetak super dengan aroma khas yang kuat dan sedap untuk memperkaya masakan rumah.',
-      gambarUrl: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500',
+      satuan: 'buah',
+      deskripsi: 'Semangka merah segar ukuran sedang, kaya air, sangat cocok dikonsumsi saat cuaca panas.',
+      gambarUrl: 'https://images.unsplash.com/photo-1587049352847-4a222e784d38?w=500',
+      rating: 4.6,
+    ),
+    ProdukBuah(
+      nama: 'Buah Naga Merah Organik',
+      kategori: 'Buah Segar',
+      harga: 25000,
+      satuan: 'kg',
+      deskripsi: 'Buah naga segar dengan daging merah pekat penuh biji hitam sehat, kaya antioksidan.',
+      gambarUrl: 'https://images.unsplash.com/photo-1527661591475-527312dd65f5?w=500',
       rating: 4.7,
     ),
-    ProdukItem(
-      nama: 'Kecap Manis UD Lokal',
-      kategori: 'Sembako',
-      harga: 16000,
-      deskripsi: 'Kecap manis kental dari ekstrak kedelai hitam pilihan asli Sidoarjo. Memberikan cita rasa karamel alami pada masakan.',
-      gambarUrl: 'https://images.unsplash.com/photo-1472938883734-704332fb6d01?w=500',
-      rating: 4.6,
+    ProdukBuah(
+      nama: 'Anggur Merah Tanpa Biji',
+      kategori: 'Buah Impor',
+      harga: 45000,
+      satuan: 'pack',
+      deskripsi: 'Anggur merah impor segar pilihan, renyah saat digigit, dan memiliki rasa manis alami yang lezat.',
+      gambarUrl: 'https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=500',
+      rating: 4.9,
     ),
   ];
 
@@ -122,102 +233,128 @@ class KatalogHomePage extends StatelessWidget {
       backgroundColor: const Color(0xFFF7F9FC),
       appBar: AppBar(
         title: const Text(
-          'Katalog UMKM Sidoarjo',
+          'Toko Buah Segar Nusantara',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        backgroundColor: Colors.white,
         elevation: 0,
       ),
-      // 3. Menggunakan ListView.builder
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16.0), // 6. Tampilan rapi konsisten
-        itemCount: daftarProduk.length,
+      body: GridView.builder(
+        padding: const EdgeInsets.all(16.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16.0,
+          mainAxisSpacing: 16.0,
+          childAspectRatio: 0.72,
+        ),
+        itemCount: daftarBuah.length,
         itemBuilder: (context, index) {
-          final produk = daftarProduk[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            // 4. Menggunakan Card + ListTile
-            child: Card(
-              elevation: 3,
-              shadowColor: Colors.black12,
-              shape: RoundedRectangleBorder(
+          final buah = daftarBuah[index];
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailBuahPage(buah: buah),
+                ),
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.04),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(16),
-                // Ketika diklik, berpindah ke Halaman Detail yang interaktif!
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailProdukPage(produk: produk),
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        produk.gambarUrl,
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          width: 60,
-                          height: 60,
-                          color: Colors.orange[100],
-                          child: const Icon(Icons.store, color: Colors.orange),
-                        ),
-                      ),
-                    ),
-                    title: Text(
-                      produk.nama,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Stack(
                       children: [
-                        const SizedBox(height: 4),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.orange.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(6),
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(16),
                           ),
-                          child: Text(
-                            produk.kategori,
-                            style: const TextStyle(
-                              color: Colors.deepOrange,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
+                          child: Image.network(
+                            buah.gambarUrl,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => Container(
+                              color: Colors.green[100],
+                              child: const Center(
+                                child: Icon(Icons.apple, color: Colors.green),
+                              ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Rp ${produk.harga.toString()}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                            fontSize: 14,
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.favorite_border,
+                              size: 16,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 16,
-                      color: Colors.grey,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          buah.nama,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Rp ${buah.harga} / ${buah.satuan}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                            fontSize: 13,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            const Icon(Icons.star, color: Colors.amber, size: 14),
+                            const SizedBox(width: 4),
+                            Text(
+                              buah.rating.toString(),
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           );
@@ -228,37 +365,31 @@ class KatalogHomePage extends StatelessWidget {
 }
 
 // ==========================================
-// HALAMAN KEDUA: DETAIL PRODUK (KETIKA DIKLIK)
+// 3. HALAMAN KEDUA: DETAIL PRODUK
 // ==========================================
-class DetailProdukPage extends StatelessWidget {
-  final ProdukItem produk;
+class DetailBuahPage extends StatelessWidget {
+  final ProdukBuah buah;
 
-  const DetailProdukPage({super.key, required this.produk});
+  const DetailBuahPage({super.key, required this.buah});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(produk.nama),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        title: Text(buah.nama),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Gambar Banner Produk di Detail
             Image.network(
-              produk.gambarUrl,
-              height: 250,
+              buah.gambarUrl,
+              height: 300,
               width: double.infinity,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Container(
-                height: 250,
-                color: Colors.orange[100],
-                child: const Center(
-                  child: Icon(Icons.store, size: 80, color: Colors.orange),
-                ),
-              ),
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
@@ -268,16 +399,28 @@ class DetailProdukPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Chip(
-                        label: Text(produk.kategori),
-                        backgroundColor: Colors.orange[100],
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.green[50],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          buah.kategori,
+                          style: TextStyle(
+                            color: Colors.green[800],
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
                       Row(
                         children: [
                           const Icon(Icons.star, color: Colors.amber, size: 20),
                           const SizedBox(width: 4),
                           Text(
-                            produk.rating.toString(),
+                            buah.rating.toString(),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -287,9 +430,9 @@ class DetailProdukPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
                   Text(
-                    produk.nama,
+                    buah.nama,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -297,16 +440,16 @@ class DetailProdukPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Rp ${produk.harga}',
+                    'Rp ${buah.harga} / ${buah.satuan}',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.deepOrange,
+                      color: Colors.green,
                     ),
                   ),
                   const Divider(height: 30),
                   const Text(
-                    'Deskripsi Produk',
+                    'Description',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -314,36 +457,35 @@ class DetailProdukPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    produk.deskripsi,
+                    buah.deskripsi,
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.black54,
-                      height: 1.5,
+                      height: 1.6,
                     ),
                   ),
                   const SizedBox(height: 40),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton.icon(
+                    height: 52,
+                    child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepOrange,
+                        backgroundColor: const Color(0xFF1B3B22),
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(14),
                         ),
                       ),
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Pesanan untuk ${produk.nama} berhasil diproses!'),
+                            content: Text('Berhasil memesan ${buah.nama}!'),
                             backgroundColor: Colors.green,
                           ),
                         );
                       },
-                      icon: const Icon(Icons.shopping_cart_checkout),
-                      label: const Text(
-                        'Pesan / Beli Produk Ini',
+                      child: const Text(
+                        'Add to Cart',
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
