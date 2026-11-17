@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'views/dashboard_page.dart';
 
 void main() {
   runApp(const TokoBuahApp());
@@ -41,7 +42,7 @@ class TokoBuahApp extends StatelessWidget {
         fontFamily: 'Roboto',
       ),
       // Mulai dari Halaman Welcome/Sambutan dulu
-      home: const WelcomePage(),
+      home: const DashboardPage(),
       debugShowCheckedModeBanner: false,
     );
   }

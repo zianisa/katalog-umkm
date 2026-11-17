@@ -1,55 +1,10 @@
 import 'package:flutter/material.dart';
+import '../models/produk_model.dart';
+import 'detail_page.dart'; // Pastikan detail_page diimpor jika diperlukan
 
-void main() {
-  runApp(const TokoBuahApp());
-}
+class TokoBuahHomePage extends StatelessWidget {
+  const TokoBuahHomePage({super.key});
 
-// 1. Class Model untuk Data (Memiliki minimal 3 properti)
-class ProdukModel {
-  final String nama;
-  final String kategori;
-  final int harga;
-  final String satuan;
-  final String deskripsi;
-  final String gambarUrl;
-  final double rating;
-
-  const ProdukModel({
-    required this.nama,
-    required this.kategori,
-    required this.harga,
-    required this.satuan,
-    required this.deskripsi,
-    required this.gambarUrl,
-    required this.rating,
-  });
-}
-
-class TokoBuahApp extends StatelessWidget {
-  const TokoBuahApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Toko Buah Segar Nusantara',
-      // 5. Menggunakan Tema Material 3
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.green,
-          brightness: Brightness.light,
-        ),
-      ),
-      home: const HomePage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  // 2. List berisi >= 8 data produk buah segar
   final List<ProdukModel> daftarBuah = const [
     ProdukModel(
       nama: 'Apel Washington Super',
@@ -129,7 +84,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F8F3),
-      // 5. AppBar Berjudul & Tema Material 3
       appBar: AppBar(
         title: const Text(
           'Toko Buah Segar Nusantara',
@@ -140,15 +94,13 @@ class HomePage extends StatelessWidget {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      // 3. Menggunakan ListView.builder
       body: ListView.builder(
-        padding: const EdgeInsets.all(16.0), // 6. Tampilan rapi & konsisten
+        padding: const EdgeInsets.all(16.0),
         itemCount: daftarBuah.length,
         itemBuilder: (context, index) {
           final buah = daftarBuah[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 12.0),
-            // 4. Setiap item memakai Card + ListTile
             child: Card(
               elevation: 2,
               shape: RoundedRectangleBorder(
@@ -157,11 +109,10 @@ class HomePage extends StatelessWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(14),
                 onTap: () {
-                  // Berpindah ke Halaman Detail saat diklik
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DetailPage(buah: buah),
+                      builder: (context) => DetailPage(produk: buah),
                     ),
                   );
                 },
@@ -216,130 +167,6 @@ class HomePage extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-// ==========================================
-// HALAMAN DETAIL PRODUK BUAH
-// ==========================================
-class DetailPage extends StatelessWidget {
-  final ProdukModel buah;
-
-  const DetailPage({super.key, required this.buah});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(buah.nama),
-        backgroundColor: Colors.green[700],
-        foregroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.network(
-              buah.gambarUrl,
-              height: 260,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Chip(
-                        label: Text(buah.kategori),
-                        backgroundColor: Colors.green[100],
-                      ),
-                      Row(
-                        children: [
-                          const Icon(Icons.star, color: Colors.amber, size: 20),
-                          const SizedBox(width: 4),
-                          Text(
-                            buah.rating.toString(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    buah.nama,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Rp ${buah.harga} / ${buah.satuan}',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
-                  ),
-                  const Divider(height: 30),
-                  const Text(
-                    'Deskripsi Buah',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    buah.deskripsi,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black54,
-                      height: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green[700],
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Berhasil memesan ${buah.nama}!'),
-                            backgroundColor: Colors.green,
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.shopping_cart),
-                      label: const Text(
-                        'Beli Buah Sekarang',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

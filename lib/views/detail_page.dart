@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/produk_model.dart';
+import '../models/cart_model.dart'; // <--- Impor model keranjang
+import 'cart_page.dart';             // <--- Impor halaman keranjang
 
 class DetailPage extends StatelessWidget {
   final ProdukModel produk;
@@ -110,10 +112,14 @@ class DetailPage extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Berhasil memesan ${produk.nama}! Segera dikirim.'),
-                            backgroundColor: Colors.green,
+                        // 1. Masukkan produk ke dalam data keranjang global
+                        CartData.tambahProduk(produk);
+
+                        // 2. Langsung pindah ke halaman keranjang belanja
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CartPage(),
                           ),
                         );
                       },
